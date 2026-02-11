@@ -1,0 +1,2569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reality Check</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e8e8e8;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        #container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 18px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            display: none;
+        }
+
+        .title-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .title-main {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #7b1fa2, #9c27b0, #e91e63, #f44336, #ff6f00, #ffd600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.03em;
+        }
+
+        .title-sub {
+            display: none;
+        }
+
+        .map-type-bar {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .map-type-label {
+            font-size: 13px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .map-type-dropdown {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e8e8e8;
+            padding: 8px 36px 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23e8e8e8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .map-type-dropdown:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .map-type-dropdown:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .map-type-dropdown option {
+            background: #1a1a1a;
+            color: #e8e8e8;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(-2px);
+        }
+
+        /* Header Right Section */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .donate-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 10px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            letter-spacing: 0.02em;
+        }
+
+        .donate-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .social-icons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .social-icon {
+            width: 28px;
+            height: 28px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .social-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .social-icon svg {
+            display: block;
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Donation Modal */
+        .donation-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        .donation-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .donation-content {
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .donation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .donation-title {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #9c27b0, #e91e63, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-modal {
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 28px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .crypto-item {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .crypto-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .crypto-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .crypto-address {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #e8e8e8;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 12px;
+            border-radius: 6px;
+            word-break: break-all;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .crypto-address:hover {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .crypto-address:active {
+            transform: scale(0.98);
+        }
+
+        .copy-hint {
+            font-size: 11px;
+            color: #666;
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        .copied-notification {
+            position: fixed;
+            top: 80px;
+            right: 30px;
+            background: rgba(76, 175, 80, 0.95);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 10001;
+            animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2s;
+            display: none;
+        }
+
+        .copied-notification.show {
+            display: block;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+
+        /* Map Container */
+        #map-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: #0a0a0a;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+
+        #map:active {
+            cursor: grabbing;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Map styling - enhanced dark theme */
+        path.country,
+        path.state,
+        path.region {
+            stroke: rgba(80, 80, 80, 0.4);
+            stroke-width: 0.7;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        path.country:hover,
+        path.state:hover,
+        path.region:hover {
+            stroke: rgba(255, 255, 255, 0.7);
+            stroke-width: 2;
+            filter: brightness(1.3) saturate(1.2);
+        }
+
+        /* Country/State labels */
+        text.place-label {
+            fill: #888;
+            font-size: 8px;
+            font-weight: 400;
+            pointer-events: none;
+            text-anchor: middle;
+            font-family: 'Inter', sans-serif;
+            opacity: 0.9;
+        }
+
+        text.place-label.large {
+            fill: #aaa;
+            font-size: 9px;
+            font-weight: 500;
+            opacity: 1;
+        }
+
+        text.place-label.major {
+            fill: #bbb;
+            font-size: 10px;
+            font-weight: 600;
+            opacity: 1;
+        }
+
+        /* City dots */
+        circle.city-dot {
+            fill: rgba(255, 255, 255, 0.4);
+            stroke: rgba(255, 255, 255, 0.6);
+            stroke-width: 0.5;
+            pointer-events: none;
+        }
+
+        /* Grid lines for extra detail */
+        line.grid-line {
+            stroke: rgba(255, 255, 255, 0.03);
+            stroke-width: 0.5;
+            pointer-events: none;
+        }
+
+        /* Controls */
+        .controls {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e8e8e8;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 300;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .control-btn:hover {
+            background: rgba(30, 30, 30, 0.9);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Legend */
+        .legend {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 26px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            z-index: 100;
+            min-width: 240px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+        }
+
+        .legend-header {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 18px;
+            letter-spacing: -0.01em;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .legend-color {
+            width: 32px;
+            height: 20px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .legend-label {
+            font-size: 13px;
+            font-weight: 400;
+            color: #999;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 2000;
+            font-size: 13px;
+            max-width: 280px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8);
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .tooltip-country {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .tooltip-crime {
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+
+        .tooltip-hint {
+            color: #666;
+            font-size: 11px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-style: italic;
+        }
+
+        /* Info Badge */
+        .info-badge {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-size: 12px;
+            color: #666;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+        }
+
+        .info-badge strong {
+            color: #999;
+            font-weight: 500;
+        }
+
+        /* Top 10 Panel */
+        .top10-panel {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            z-index: 100;
+            width: 280px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+        }
+
+        .top10-panel.crime-mode {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+                linear-gradient(135deg, #4a148c, #7b1fa2, #9c27b0, #ba68c8, #d81b60, #e53935, #ff6f00, #ffd54f);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .top10-panel.iq-mode {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+                linear-gradient(135deg, #0d47a1, #1565c0, #1976d2, #42a5f5, #90caf9, #ff6f00, #ff5722, #e53935, #c62828);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .top10-panel.ethnicity-mode {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+                linear-gradient(135deg, #4a148c, #7b1fa2, #9c27b0, #ba68c8, #d81b60, #e53935, #ff6f00, #ffd54f);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .top10-panel.income-mode {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+                linear-gradient(135deg, #1b5e20, #2e7d32, #43a047, #66bb6a, #ffeb3b, #ffc107, #ff9800, #ff5722, #c62828);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .top10-panel.birthrate-mode {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+                linear-gradient(135deg, #0d47a1, #1565c0, #1976d2, #42a5f5, #90caf9, #ff9800, #ff5722, #e53935, #c62828);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        /* Country Detail Modal */
+        .country-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .country-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e8e8e8;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-country-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .modal-population {
+            font-size: 16px;
+            color: #999;
+            margin-bottom: 32px;
+        }
+
+        .modal-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .chart-bar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chart-bar-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .chart-bar-value {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .chart-bar-track {
+            width: 100%;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.6s ease;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .top10-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .top10-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .top10-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .top10-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .top10-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .top10-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .top10-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .top10-rank {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            min-width: 24px;
+        }
+
+        .top10-country {
+            flex: 1;
+            font-size: 13px;
+            color: #e8e8e8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .top10-value {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .top10-value.low {
+            background: rgba(74, 20, 140, 0.3);
+            color: #9c27b0;
+        }
+
+        .top10-value.high {
+            background: rgba(255, 111, 0, 0.3);
+            color: #ff6f00;
+        }
+
+        /* Country Details Popup */
+        .country-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 32px;
+            width: 500px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 2000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+            display: none;
+        }
+
+        .country-popup.show {
+            display: block;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1999;
+            display: none;
+        }
+
+        .popup-overlay.show {
+            display: block;
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .popup-country-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .popup-close {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .popup-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .popup-population {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 24px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .popup-population strong {
+            color: #e8e8e8;
+            font-size: 18px;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+
+        .chart-bar {
+            margin-bottom: 20px;
+        }
+
+        .chart-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #aaa;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chart-value {
+            color: #e8e8e8;
+            font-weight: 600;
+        }
+
+        .chart-bar-bg {
+            width: 100%;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* Country Detail Modal */
+        .country-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .country-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e8e8e8;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-population {
+            font-size: 16px;
+            color: #aaa;
+            margin-bottom: 24px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .modal-population strong {
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+
+        .chart-item {
+            margin-bottom: 20px;
+        }
+
+        .chart-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .chart-label-name {
+            color: #aaa;
+            font-weight: 500;
+        }
+
+        .chart-label-value {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .chart-bar-bg {
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.6s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Loading State */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            color: #666;
+            z-index: 50;
+        }
+
+        /* Mobile Info Toggle - Hidden by default */
+        .mobile-info-toggle {
+            display: none;
+        }
+
+        .mobile-info-sheet {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .header-right {
+                gap: 10px;
+            }
+
+            .donate-btn {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+
+            .social-icons {
+                gap: 8px;
+            }
+
+            .social-icon {
+                width: 26px;
+                height: 26px;
+            }
+
+            .social-icon svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            /* Hide desktop legend, top10, and zoom controls */
+            .legend, .top10-panel, .controls {
+                display: none;
+            }
+
+            /* Mobile toggle button - Professional design without emoticons */
+            .mobile-info-toggle {
+                display: flex !important;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: white;
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+                z-index: 1000;
+                transition: all 0.3s ease;
+                font-family: 'Inter', sans-serif;
+            }
+
+            .mobile-info-toggle:active {
+                transform: scale(0.95);
+                background: rgba(255, 255, 255, 0.15);
+            }
+
+            /* Mobile bottom sheet */
+            .mobile-info-sheet {
+                display: block !important;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(20px);
+                border-top-left-radius: 24px;
+                border-top-right-radius: 24px;
+                border-top: 2px solid rgba(255, 255, 255, 0.15);
+                max-height: 70vh;
+                overflow-y: auto;
+                z-index: 999;
+                transform: translateY(100%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.8);
+            }
+
+            .mobile-info-sheet.open {
+                transform: translateY(0);
+            }
+
+            .mobile-sheet-handle {
+                width: 40px;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 2px;
+                margin: 12px auto 20px;
+            }
+
+            .mobile-sheet-tabs {
+                display: flex;
+                gap: 8px;
+                padding: 0 20px 16px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .mobile-sheet-tab {
+                flex: 1;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: #aaa;
+                padding: 10px;
+                border-radius: 8px;
+                font-size: 13px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-family: 'Inter', sans-serif;
+            }
+
+            .mobile-sheet-tab.active {
+                background: rgba(156, 39, 176, 0.2);
+                border-color: rgba(156, 39, 176, 0.5);
+                color: #fff;
+            }
+
+            .mobile-sheet-content {
+                padding: 20px;
+            }
+
+            .mobile-sheet-section {
+                display: none;
+            }
+
+            .mobile-sheet-section.active {
+                display: block;
+            }
+
+            /* Mobile legend styles */
+            .mobile-legend {
+                background: transparent;
+                border: none;
+                padding: 0;
+            }
+
+            .mobile-legend .legend-header {
+                font-size: 16px;
+                margin-bottom: 16px;
+            }
+
+            .mobile-legend .legend-items {
+                gap: 10px;
+            }
+
+            .mobile-legend .legend-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.03);
+                border-radius: 8px;
+            }
+
+            /* Mobile top10 styles */
+            .mobile-top10 {
+                background: transparent;
+                border: none;
+                padding: 0;
+            }
+
+            .mobile-top10 .top10-header {
+                margin-bottom: 16px;
+            }
+
+            .mobile-top10 .top10-title {
+                font-size: 16px;
+            }
+
+            .mobile-top10 .top10-toggle {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .mobile-top10 .top10-list {
+                gap: 10px;
+            }
+
+            .mobile-top10 .top10-item {
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.03);
+            }
+            }
+
+            text.place-label {
+                font-size: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo">🌍</div>
+                <div class="title-section">
+                    <div class="title-main" id="title-main">Reality Check</div>
+                    <div class="title-sub" id="title-sub">AI Powered Data</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="back-btn" id="back-btn">← Back to World</button>
+                <button class="donate-btn" id="donate-btn">Donate</button>
+                <div class="social-icons">
+                    <a href="https://x.com/reality35139" target="_blank" class="social-icon twitter" title="Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@realitycheck.tools" target="_blank" class="social-icon tiktok" title="TikTok">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/realitycheck.tools" target="_blank" class="social-icon instagram" title="Instagram">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Container -->
+        <div id="map-container">
+            <svg id="map"></svg>
+            <div class="loading" id="loading">Loading map data...</div>
+
+            <!-- Map Type Selector -->
+            <div class="map-type-bar">
+                <label class="map-type-label" for="map-type">Map Type:</label>
+                <select class="map-type-dropdown" id="map-type">
+                    <option value="crime">Global Crime</option>
+                    <option value="iq">IQ Index</option>
+                    <option value="ethnicity">Ethnic Diversity</option>
+                    <option value="income">Average Income</option>
+                    <option value="birthrate">Birth Rate</option>
+                </select>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button class="control-btn" id="zoom-in" title="Zoom In">+</button>
+                <button class="control-btn" id="zoom-out" title="Zoom Out">−</button>
+                <button class="control-btn" id="zoom-reset" title="Reset View">⟲</button>
+            </div>
+
+            <!-- Legend -->
+            <div class="legend" id="legend">
+                <div class="legend-header" id="legend-title">Crime Index Scale</div>
+                <div class="legend-items" id="legend-items">
+                    <!-- Legend items will be dynamically generated -->
+                </div>
+            </div>
+
+            <!-- Top 10 Panel -->
+            <div class="top10-panel" id="top10-panel">
+                <div class="top10-header">
+                    <div class="top10-title" id="top10-title">Lowest Crime</div>
+                    <button class="top10-toggle" id="top10-toggle">Show Highest</button>
+                </div>
+                <div class="top10-list" id="top10-list">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Info Badge -->
+            <!-- <div class="info-badge">
+                <strong>Tip:</strong> Click countries to view regional data
+            </div> -->
+
+            <!-- Tooltip -->
+            <div class="tooltip" id="tooltip">
+                <div class="tooltip-country"></div>
+                <div class="tooltip-crime"></div>
+                <div class="tooltip-hint"></div>
+            </div>
+
+            <!-- Mobile Info Toggle Button -->
+            <button class="mobile-info-toggle" id="mobile-info-toggle">i</button>
+
+            <!-- Mobile Info Sheet -->
+            <div class="mobile-info-sheet" id="mobile-info-sheet">
+                <div class="mobile-sheet-handle"></div>
+                <div class="mobile-sheet-tabs">
+                    <button class="mobile-sheet-tab active" data-tab="legend">Legend</button>
+                    <button class="mobile-sheet-tab" data-tab="top10">Top 10</button>
+                </div>
+                <div class="mobile-sheet-content">
+                    <div class="mobile-sheet-section active" id="mobile-legend-section">
+                        <div class="mobile-legend">
+                            <div class="legend-header" id="mobile-legend-title">Loading...</div>
+                            <div class="legend-items" id="mobile-legend-items"></div>
+                        </div>
+                    </div>
+                    <div class="mobile-sheet-section" id="mobile-top10-section">
+                        <div class="mobile-top10">
+                            <div class="top10-header">
+                                <div class="top10-title" id="mobile-top10-title">Loading...</div>
+                                <button class="top10-toggle" id="mobile-top10-toggle">Show Highest</button>
+                            </div>
+                            <div class="top10-list" id="mobile-top10-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Country Detail Modal -->
+            <div class="country-modal" id="country-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="modal-country-name"></div>
+                        <button class="modal-close" id="modal-close">×</button>
+                    </div>
+                    <div class="modal-population" id="modal-population"></div>
+                    <div class="chart-container" id="chart-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donation Modal -->
+    <div class="donation-modal" id="donation-modal">
+        <div class="donation-content">
+            <div class="donation-header">
+                <div class="donation-title">Support Us</div>
+                <button class="close-modal" id="close-modal">×</button>
+            </div>
+            
+            <div class="crypto-item">
+                <div class="crypto-name">Bitcoin ($BTC)</div>
+                <div class="crypto-address" data-address="bc1pmjnm9y85y0pl6r56qr5mssanjjv0yr2k350kp4vn7rrjy49dxkmqnrsryc">
+                    bc1pmjnm9y85y0pl6r56qr5mssanjjv0yr2k350kp4vn7rrjy49dxkmqnrsryc
+                </div>
+                <div class="copy-hint">Click to copy</div>
+            </div>
+
+            <div class="crypto-item">
+                <div class="crypto-name">Ethereum ($ETH)</div>
+                <div class="crypto-address" data-address="0x23ed1C113f5D6866781A07b1703497566Ff46cbb">
+                    0x23ed1C113f5D6866781A07b1703497566Ff46cbb
+                </div>
+                <div class="copy-hint">Click to copy</div>
+            </div>
+
+            <div class="crypto-item">
+                <div class="crypto-name">Solana ($SOL)</div>
+                <div class="crypto-address" data-address="GMmzskXUWRjgcMFXZm8T2cJ1mCwT9WfbsST9ZHeAx2Da">
+                    GMmzskXUWRjgcMFXZm8T2cJ1mCwT9WfbsST9ZHeAx2Da
+                </div>
+                <div class="copy-hint">Click to copy</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copy Notification -->
+    <div class="copied-notification" id="copied-notification">
+        ✓ Address copied to clipboard!
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson@3"></script>
+    <script>
+        window.addEventListener('load', function() {
+        
+        // Crime data
+        const crimeData = {
+            'Venezuela': 85, 'Papua New Guinea': 82, 'South Africa': 78, 'Afghanistan': 80,
+            'Honduras': 75, 'Trinidad and Tobago': 72, 'Brazil': 68, 'Mexico': 65,
+            'Colombia': 64, 'Jamaica': 70, 'El Salvador': 66, 'Guatemala': 63,
+            'Nigeria': 67, 'Kenya': 62, 'Pakistan': 61, 'India': 48,
+            'Bangladesh': 52, 'Philippines': 55, 'Peru': 58, 'Ecuador': 60,
+            'Argentina': 54, 'Chile': 45, 'Ukraine': 50, 'Russia': 53,
+            'Turkey': 47, 'Egypt': 51, 'Morocco': 46, 'Algeria': 49,
+            'Saudi Arabia': 35, 'United States of America': 48, 'Canada': 38, 'Australia': 42,
+            'New Zealand': 40, 'United Kingdom': 44, 'France': 46, 'Germany': 39,
+            'Italy': 43, 'Spain': 41, 'Poland': 37, 'Romania': 42,
+            'Netherlands': 36, 'Belgium': 40, 'Sweden': 43, 'Norway': 32,
+            'Denmark': 31, 'Finland': 33, 'Switzerland': 28, 'Austria': 30,
+            'Czech Republic': 35, 'Czechia': 35, 'Greece': 38, 'Portugal': 34,
+            'Ireland': 36, 'China': 44, 'Japan': 25, 'South Korea': 29,
+            'Taiwan': 27, 'Thailand': 50, 'Vietnam': 48, 'Malaysia': 47,
+            'Singapore': 22, 'Indonesia': 52, 'Myanmar': 56, 'Cambodia': 54,
+            'Laos': 51, 'Iran': 49, 'Iraq': 75, 'Syria': 78,
+            'Yemen': 76, 'Libya': 74, 'Somalia': 80, 'Sudan': 72,
+            'Chad': 70, 'Mali': 68, 'Ethiopia': 58, 'Tanzania': 55,
+            'Uganda': 57, 'Zimbabwe': 60, 'Mozambique': 59, 'Angola': 62,
+            'Dem. Rep. Congo': 71, 'Central African Rep.': 73, 'Cameroon': 61, 'Ghana': 48,
+            'Ivory Coast': 53, "Côte d'Ivoire": 53, 'Senegal': 45, 'Mauritania': 50,
+            'Niger': 56, 'Burkina Faso': 52, 'Benin': 47, 'Togo': 49,
+            'Botswana': 44, 'Namibia': 46, 'Zambia': 54, 'Malawi': 51,
+            'Rwanda': 43, 'Burundi': 57, 'Tunisia': 42, 'Lebanon': 55,
+            'Jordan': 40, 'Israel': 38, 'Palestine': 52, 'United Arab Emirates': 24,
+            'Qatar': 20, 'Kuwait': 26, 'Oman': 23, 'Bahrain': 25,
+            'Iceland': 18, 'Luxembourg': 27, 'Slovenia': 29, 'Croatia': 33,
+            'Serbia': 36, 'Bosnia and Herzegovina': 39, 'Bosnia and Herz.': 39,
+            'Albania': 41, 'North Macedonia': 38, 'Macedonia': 38, 'Bulgaria': 40,
+            'Hungary': 34, 'Slovakia': 32, 'Estonia': 31, 'Latvia': 35,
+            'Lithuania': 34, 'Belarus': 44, 'Moldova': 46, 'Georgia': 42,
+            'Armenia': 40, 'Azerbaijan': 43, 'Kazakhstan': 47, 'Uzbekistan': 49,
+            'Turkmenistan': 48, 'Kyrgyzstan': 51, 'Tajikistan': 52, 'Mongolia': 45,
+            'Nepal': 44, 'Bhutan': 35, 'Sri Lanka': 48, 'Maldives': 30,
+            'Costa Rica': 42, 'Panama': 45, 'Nicaragua': 48, 'Belize': 50,
+            'Cuba': 36, 'Dominican Republic': 52, 'Dominican Rep.': 52, 'Haiti': 70,
+            'Bahamas': 47, 'Barbados': 38, 'Guyana': 58, 'Suriname': 54,
+            'Uruguay': 40, 'Paraguay': 50, 'Bolivia': 56
+        };
+
+        const usStatesData = {
+            'Alaska': 69, 'New Mexico': 66, 'Louisiana': 65, 'Arkansas': 63,
+            'Tennessee': 62, 'Alabama': 61, 'Missouri': 60, 'South Carolina': 59,
+            'Arizona': 58, 'Oklahoma': 57, 'Michigan': 56, 'Nevada': 58,
+            'Delaware': 54, 'Florida': 53, 'Texas': 52, 'Georgia': 55,
+            'Illinois': 51, 'Maryland': 52, 'Kansas': 49, 'Ohio': 50,
+            'Indiana': 48, 'Pennsylvania': 47, 'Colorado': 51, 'North Carolina': 49,
+            'California': 53, 'Mississippi': 62, 'Montana': 47, 'South Dakota': 46,
+            'Oregon': 50, 'Washington': 52, 'Wisconsin': 44, 'Minnesota': 43,
+            'Nebraska': 42, 'Iowa': 40, 'Wyoming': 45, 'North Dakota': 41,
+            'Utah': 43, 'Idaho': 42, 'West Virginia': 48, 'Kentucky': 50,
+            'Virginia': 44, 'Connecticut': 40, 'Massachusetts': 39, 'Rhode Island': 41,
+            'New York': 48, 'New Jersey': 42, 'New Hampshire': 35, 'Vermont': 33,
+            'Maine': 32, 'Hawaii': 45
+        };
+
+        // IQ data by country (average IQ scores)
+        const iqData = {
+            'Singapore': 108, 'Hong Kong': 108, 'South Korea': 106, 'Japan': 105,
+            'China': 104, 'Taiwan': 104, 'Switzerland': 102, 'Netherlands': 101,
+            'Iceland': 101, 'Finland': 101, 'Germany': 100, 'Austria': 100,
+            'Belgium': 99, 'United Kingdom': 99, 'Norway': 99, 'Sweden': 99,
+            'Denmark': 98, 'Poland': 98, 'Australia': 98, 'New Zealand': 98,
+            'Canada': 98, 'France': 98, 'Estonia': 98, 'Italy': 97,
+            'Czech Republic': 97, 'Czechia': 97, 'Spain': 97, 'United States of America': 97,
+            'Slovenia': 96, 'Portugal': 95, 'Israel': 95, 'Hungary': 95,
+            'Ireland': 93, 'Russia': 96, 'Greece': 92, 'Slovakia': 96,
+            'Croatia': 95, 'Lithuania': 94, 'Latvia': 94, 'Ukraine': 92,
+            'Romania': 91, 'Serbia': 93, 'Bulgaria': 91, 'Turkey': 89,
+            'Argentina': 93, 'Chile': 90, 'Uruguay': 92, 'Brazil': 87,
+            'Mexico': 88, 'Peru': 85, 'Colombia': 84, 'Ecuador': 84,
+            'Venezuela': 84, 'India': 82, 'Indonesia': 87, 'Thailand': 91,
+            'Vietnam': 94, 'Malaysia': 92, 'Philippines': 86, 'Iran': 84,
+            'Egypt': 81, 'Morocco': 84, 'Tunisia': 83, 'Algeria': 83,
+            'South Africa': 77, 'Kenya': 75, 'Nigeria': 71, 'Ghana': 73,
+            'Ethiopia': 69, 'Pakistan': 80, 'Bangladesh': 82, 'Nepal': 78,
+            'Saudi Arabia': 84, 'United Arab Emirates': 88, 'Qatar': 83,
+            'Kuwait': 83, 'Jordan': 84, 'Lebanon': 82, 'Iraq': 79,
+            'Afghanistan': 72, 'Mongolia': 98, 'Kazakhstan': 94, 'Uzbekistan': 87,
+            // Additional African countries
+            'Tanzania': 72, 'Uganda': 73, 'Mozambique': 71, 'Madagascar': 70,
+            'Cameroon': 70, 'Ivory Coast': 71, "Côte d'Ivoire": 71, 'Mali': 69,
+            'Burkina Faso': 70, 'Niger': 69, 'Chad': 68, 'Sudan': 72,
+            'Somalia': 68, 'Dem. Rep. Congo': 68,
+            'Angola': 70, 'Zambia': 71, 'Zimbabwe': 72, 'Malawi': 70,
+            'Rwanda': 73, 'Burundi': 71, 'Senegal': 76, 'Guinea': 67,
+            'Sierra Leone': 67, 'Liberia': 67, 'Mauritania': 76, 'Benin': 70,
+            'Togo': 70, 'Central African Rep.': 68, 'Namibia': 75,
+            'Botswana': 74, 'Libya': 83, 'Congo': 70, 'Gabon': 72,
+            'Equatorial Guinea': 69
+        };
+
+        // Average Income data by country (in thousands USD per year)
+        const incomeData = {
+            // Very High Income (80+)
+            'Luxembourg': 135, 'Switzerland': 93, 'Norway': 89, 'Ireland': 85,
+            'United States of America': 76, 'Denmark': 68, 'Singapore': 73, 'Iceland': 68,
+            'Qatar': 83, 'Australia': 65, 'Netherlands': 61, 'Austria': 60,
+            'Sweden': 59, 'Finland': 58, 'Germany': 56, 'Belgium': 55,
+            'Canada': 54, 'United Kingdom': 51, 'France': 49, 'Japan': 48,
+            'New Zealand': 48, 'Israel': 52, 'United Arab Emirates': 69,
+            // High Income (40-80)
+            'Italy': 45, 'South Korea': 47, 'Spain': 42, 'Kuwait': 38,
+            'Saudi Arabia': 31, 'Czech Republic': 31, 'Czechia': 31, 'Slovenia': 33,
+            'Portugal': 30, 'Estonia': 32, 'Lithuania': 28, 'Poland': 27,
+            'Hungary': 26, 'Slovakia': 27, 'Croatia': 24, 'Latvia': 26,
+            'Russia': 21, 'Romania': 23, 'Chile': 22, 'Uruguay': 21,
+            'Argentina': 19, 'Malaysia': 19, 'Turkey': 17, 'Panama': 20,
+            'Greece': 28, 'Bulgaria': 18, 'Bahrain': 35, 'Oman': 27,
+            // Middle Income (8-40)
+            'China': 18, 'Brazil': 14, 'Mexico': 16, 'Costa Rica': 18,
+            'Serbia': 15, 'Thailand': 13, 'Colombia': 12, 'Peru': 11,
+            'South Africa': 11, 'Ecuador': 10, 'Algeria': 10, 'Tunisia': 9,
+            'Egypt': 7, 'Indonesia': 8, 'Philippines': 7, 'Vietnam': 6,
+            'Morocco': 7, 'Ukraine': 8, 'India': 4, 'Pakistan': 3,
+            'Bangladesh': 4, 'Nigeria': 4, 'Kenya': 3, 'Ghana': 4,
+            'Sri Lanka': 8, 'Jordan': 9, 'Lebanon': 10, 'Iran': 11,
+            'Iraq': 9, 'Venezuela': 7, 'Paraguay': 9, 'Bolivia': 7,
+            'Guatemala': 8, 'Honduras': 5, 'El Salvador': 8, 'Nicaragua': 4,
+            'Jamaica': 9, 'Dominican Republic': 15, 'Dominican Rep.': 15,
+            'Trinidad and Tobago': 23, 'Mongolia': 8, 'Cambodia': 3,
+            'Laos': 4, 'Myanmar': 3, 'Nepal': 2, 'Afghanistan': 1,
+            'Yemen': 2, 'Syria': 3, 'Libya': 12, 'Sudan': 2,
+            'Senegal': 3, 'Ivory Coast': 4, "Côte d'Ivoire": 4,
+            'Cameroon': 3, 'Zambia': 3, 'Zimbabwe': 2, 'Botswana': 14,
+            'Namibia': 9, 'Angola': 6, 'Gabon': 14, 'Equatorial Guinea': 16,
+            'Congo': 4, 'Mauritania': 3, 'Benin': 2, 'Togo': 2,
+            'Guinea': 2, 'Burkina Faso': 2, 'Albania': 11, 'Bosnia and Herzegovina': 12,
+            'Bosnia and Herz.': 12, 'North Macedonia': 12, 'Macedonia': 12,
+            'Belarus': 16, 'Moldova': 10, 'Georgia': 11, 'Armenia': 10,
+            'Azerbaijan': 12, 'Kazakhstan': 20, 'Uzbekistan': 4, 'Turkmenistan': 13,
+            'Kyrgyzstan': 3, 'Tajikistan': 2, 'Haiti': 2, 'Cuba': 16,
+            'Guyana': 11, 'Suriname': 13, 'Belize': 8,
+            // Low Income (<8)
+            'Tanzania': 2, 'Uganda': 2, 'Ethiopia': 2, 'Mozambique': 1,
+            'Madagascar': 1, 'Malawi': 1, 'Rwanda': 2, 'Burundi': 1,
+            'Dem. Rep. Congo': 1, 'Central African Rep.': 1, 'Niger': 1,
+            'Chad': 1, 'Mali': 2, 'Burkina Faso': 2, 'Somalia': 1,
+            'Guyana': 11, 'Suriname': 13, 'Belize': 8,
+            // Low Income (<8)
+            'Tanzania': 2, 'Uganda': 2, 'Ethiopia': 2, 'Mozambique': 1,
+            'Madagascar': 1, 'Malawi': 1, 'Rwanda': 2, 'Burundi': 1,
+            'Dem. Rep. Congo': 1, 'Central African Rep.': 1, 'Niger': 1,
+            'Chad': 1, 'Mali': 2, 'Burkina Faso': 2, 'Somalia': 1,
+            'Sierra Leone': 1, 'Liberia': 1, 'Papua New Guinea': 5
+        };
+
+        // Population data by country (in millions)
+        const populationData = {
+            'China': 1425, 'India': 1428, 'United States of America': 339, 'Indonesia': 277,
+            'Pakistan': 240, 'Nigeria': 223, 'Brazil': 216, 'Bangladesh': 173,
+            'Russia': 144, 'Mexico': 128, 'Japan': 123, 'Ethiopia': 126,
+            'Philippines': 117, 'Egypt': 112, 'Vietnam': 98, 'Dem. Rep. Congo': 102,
+            'Turkey': 85, 'Iran': 89, 'Germany': 84, 'Thailand': 71,
+            'United Kingdom': 68, 'Tanzania': 67, 'France': 64, 'South Africa': 60,
+            'Italy': 59, 'Kenya': 56, 'Myanmar': 54, 'South Korea': 52,
+            'Colombia': 52, 'Spain': 48, 'Uganda': 48, 'Argentina': 46,
+            'Algeria': 45, 'Sudan': 48, 'Ukraine': 38, 'Iraq': 45,
+            'Afghanistan': 42, 'Poland': 38, 'Canada': 39, 'Morocco': 37,
+            'Saudi Arabia': 36, 'Uzbekistan': 35, 'Peru': 34, 'Angola': 36,
+            'Malaysia': 34, 'Mozambique': 33, 'Ghana': 34, 'Yemen': 34,
+            'Nepal': 30, 'Venezuela': 28, 'Madagascar': 30, 'Cameroon': 28,
+            'Ivory Coast': 28, "Côte d'Ivoire": 28, 'Australia': 26, 'Niger': 27,
+            'Sri Lanka': 22, 'Burkina Faso': 23, 'Mali': 23, 'Romania': 19,
+            'Malawi': 20, 'Chile': 19, 'Kazakhstan': 19, 'Zambia': 20,
+            'Guatemala': 18, 'Ecuador': 18, 'Syria': 23, 'Netherlands': 18,
+            'Senegal': 18, 'Cambodia': 17, 'Chad': 18, 'Somalia': 18,
+            'Zimbabwe': 16, 'Guinea': 14, 'Rwanda': 14, 'Benin': 13,
+            'Burundi': 13, 'Tunisia': 12, 'Bolivia': 12, 'Belgium': 12,
+            'Haiti': 12, 'Cuba': 11, 'Dominican Republic': 11, 'Dominican Rep.': 11,
+            'Czech Republic': 10.9, 'Czechia': 10.9, 'Greece': 10.5, 'Jordan': 11,
+            'Portugal': 10.3, 'Azerbaijan': 10.3, 'Sweden': 10.5, 'Honduras': 10.4,
+            'United Arab Emirates': 9.4, 'Hungary': 9.6, 'Tajikistan': 10,
+            'Belarus': 9.2, 'Austria': 9.1, 'Papua New Guinea': 10, 'Serbia': 6.7,
+            'Switzerland': 8.8, 'Togo': 9, 'Sierra Leone': 8.6, 'Hong Kong': 7.5,
+            'Laos': 7.6, 'Paraguay': 6.8, 'Bulgaria': 6.5, 'Libya': 6.9,
+            'Lebanon': 5.5, 'Nicaragua': 7, 'Kyrgyzstan': 7, 'El Salvador': 6.3,
+            'Turkmenistan': 6.4, 'Singapore': 6, 'Denmark': 5.9, 'Finland': 5.6,
+            'Congo': 6, 'Slovakia': 5.4, 'Norway': 5.5, 'Oman': 4.6,
+            'Palestine': 5.4, 'Costa Rica': 5.2, 'Liberia': 5.3, 'Ireland': 5.1,
+            'Central African Rep.': 5.6, 'New Zealand': 5.2, 'Mauritania': 4.9,
+            'Panama': 4.4, 'Kuwait': 4.3, 'Croatia': 3.9, 'Moldova': 2.5,
+            'Georgia': 3.7, 'Eritrea': 3.7, 'Uruguay': 3.4, 'Bosnia and Herzegovina': 3.2,
+            'Bosnia and Herz.': 3.2, 'Mongolia': 3.4, 'Armenia': 2.8, 'Jamaica': 2.8,
+            'Qatar': 2.7, 'Albania': 2.8, 'Puerto Rico': 3.2, 'Lithuania': 2.7,
+            'Namibia': 2.6, 'Gambia': 2.8, 'Botswana': 2.7, 'Gabon': 2.4,
+            'Lesotho': 2.3, 'North Macedonia': 2.1, 'Macedonia': 2.1, 'Slovenia': 2.1,
+            'Guinea-Bissau': 2.1, 'Latvia': 1.8, 'Bahrain': 1.5, 'Equatorial Guinea': 1.7,
+            'Trinidad and Tobago': 1.5, 'Estonia': 1.4, 'Mauritius': 1.3,
+            'Cyprus': 1.3, 'Eswatini': 1.2, 'Djibouti': 1.1, 'Fiji': 0.9,
+            'Reunion': 0.9, 'Comoros': 0.9, 'Guyana': 0.8, 'Bhutan': 0.8,
+            'Solomon Islands': 0.7, 'Macao': 0.7, 'Montenegro': 0.6, 'Luxembourg': 0.7,
+            'Suriname': 0.6, 'Cabo Verde': 0.6, 'Maldives': 0.5, 'Malta': 0.5,
+            'Brunei': 0.4, 'Belize': 0.4, 'Bahamas': 0.4, 'Iceland': 0.4,
+            'Vanuatu': 0.3, 'Barbados': 0.3, 'Sao Tome and Principe': 0.2,
+            'Samoa': 0.2, 'Saint Lucia': 0.2, 'Kiribati': 0.1, 'Grenada': 0.1,
+            'Tonga': 0.1, 'Seychelles': 0.1, 'Antigua and Barbuda': 0.1,
+            'Andorra': 0.08, 'Dominica': 0.07, 'Saint Kitts and Nevis': 0.05,
+            'Liechtenstein': 0.04, 'Monaco': 0.04, 'San Marino': 0.03
+        };
+
+        // Birth Rate data by country (births per 1000 people per year)
+        const birthRateData = {
+            // Very High Birth Rate (35+) - Africa
+            'Niger': 48, 'Chad': 43, 'Mali': 42, 'Somalia': 42,
+            'Dem. Rep. Congo': 41, 'Angola': 41, 'Burundi': 40, 'Nigeria': 39,
+            'Uganda': 39, 'Burkina Faso': 38, 'Mozambique': 38, 'Zambia': 37,
+            'Malawi': 37, 'Tanzania': 36, 'Benin': 36, 'Guinea': 36,
+            'Central African Rep.': 35, 'Senegal': 34, 'Cameroon': 35,
+            // High Birth Rate (25-35)
+            'Afghanistan': 35, 'Pakistan': 28, 'Iraq': 28, 'Yemen': 28,
+            'Madagascar': 32, 'Togo': 33, 'Sudan': 32, 'Ethiopia': 31,
+            'Kenya': 28, 'Ghana': 29, 'Ivory Coast': 31, "Côte d'Ivoire": 31,
+            'Rwanda': 29, 'Egypt': 26, 'Zimbabwe': 30, 'Congo': 32,
+            'Sierra Leone': 33, 'Liberia': 33, 'Mauritania': 30, 'Gabon': 27,
+            'Equatorial Guinea': 30, 'Papua New Guinea': 29, 'Guatemala': 25,
+            'Honduras': 24, 'Bolivia': 25, 'Philippines': 23, 'Haiti': 25,
+            // Medium Birth Rate (15-25)
+            'India': 17, 'Bangladesh': 18, 'Israel': 20, 'Jordan': 24,
+            'Mexico': 17, 'Indonesia': 17, 'Nepal': 19, 'Cambodia': 21,
+            'Laos': 22, 'Myanmar': 17, 'Venezuela': 18, 'Peru': 18,
+            'Colombia': 16, 'Ecuador': 19, 'Nicaragua': 21, 'El Salvador': 18,
+            'Paraguay': 20, 'South Africa': 20, 'Botswana': 22, 'Namibia': 25,
+            'Saudi Arabia': 19, 'Kuwait': 18, 'Oman': 20, 'Qatar': 10,
+            'United Arab Emirates': 11, 'Mongolia': 21, 'Algeria': 23,
+            'Morocco': 19, 'Tunisia': 16, 'Libya': 20, 'Vietnam': 16,
+            // Low Birth Rate (10-15)
+            'Turkey': 15, 'Iran': 15, 'Brazil': 14, 'Argentina': 16,
+            'Chile': 13, 'Uruguay': 13, 'Costa Rica': 13, 'Panama': 17,
+            'China': 11, 'Thailand': 10, 'Sri Lanka': 15, 'Malaysia': 15,
+            'United States of America': 11, 'Canada': 10, 'Australia': 12,
+            'New Zealand': 12, 'Russia': 10, 'Ukraine': 8, 'Belarus': 9,
+            'Romania': 9, 'Bulgaria': 8, 'Serbia': 9, 'Croatia': 9,
+            'Albania': 11, 'North Macedonia': 10, 'Macedonia': 10,
+            'Bosnia and Herzegovina': 8, 'Bosnia and Herz.': 8,
+            'Georgia': 12, 'Armenia': 13, 'Azerbaijan': 14, 'Kazakhstan': 19,
+            'Uzbekistan': 21, 'Turkmenistan': 19, 'Kyrgyzstan': 23, 'Tajikistan': 26,
+            // Very Low Birth Rate (<10)
+            'South Korea': 6, 'Singapore': 8, 'Hong Kong': 7, 'Japan': 7,
+            'Taiwan': 8, 'Italy': 7, 'Spain': 7, 'Portugal': 8,
+            'Greece': 8, 'Poland': 9, 'Germany': 9, 'Austria': 9,
+            'Switzerland': 10, 'Hungary': 9, 'Czech Republic': 10, 'Czechia': 10,
+            'Slovakia': 10, 'Slovenia': 9, 'Estonia': 10, 'Latvia': 9,
+            'Lithuania': 9, 'Finland': 9, 'Norway': 10, 'Sweden': 11,
+            'Denmark': 10, 'Netherlands': 10, 'Belgium': 10, 'France': 11,
+            'United Kingdom': 11, 'Ireland': 12, 'Iceland': 12, 'Luxembourg': 10,
+            'Moldova': 10, 'Cuba': 10, 'Jamaica': 13, 'Trinidad and Tobago': 11,
+            'Dominican Republic': 19, 'Dominican Rep.': 19, 'Lebanon': 13,
+            'Syria': 21, 'Bahrain': 13, 'Guyana': 18, 'Suriname': 16, 'Belize': 19
+        };
+
+        const ethnicityData = {
+            'Uganda': 93, 'Liberia': 91, 'Madagascar': 88, 'Congo': 87,
+            'Cameroon': 86, 'Chad': 86, 'Kenya': 85, 'Nigeria': 85,
+            'Central African Rep.': 84, 'Ivory Coast': 82, "Côte d'Ivoire": 82,
+            'Togo': 82, 'South Africa': 81, 'Mali': 79, 'Angola': 79,
+            'Tanzania': 78, 'Dem. Rep. Congo': 87,
+            'India': 76, 'Nepal': 75, 'Malaysia': 74, 'Pakistan': 73,
+            'Singapore': 73, 'Philippines': 72, 'Indonesia': 71, 'Papua New Guinea': 99,
+            'Canada': 71, 'United States of America': 69, 'Australia': 66,
+            'United Kingdom': 63, 'France': 62, 'Germany': 61, 'Belgium': 60,
+            'Netherlands': 59, 'Switzerland': 58, 'Spain': 57, 'Italy': 56,
+            'Brazil': 66, 'Mexico': 65, 'Colombia': 64, 'Peru': 63,
+            'Venezuela': 62, 'Argentina': 61, 'Bolivia': 74, 'Ecuador': 67,
+            'Russia': 65, 'China': 54, 'Kazakhstan': 69, 'Uzbekistan': 58,
+            'Turkey': 58, 'Iran': 54, 'Iraq': 56, 'Syria': 55,
+            'Lebanon': 56, 'Israel': 60, 'Egypt': 52, 'Morocco': 53,
+            'Algeria': 52, 'Tunisia': 51, 'Saudi Arabia': 47, 'United Arab Emirates': 71,
+            'Thailand': 55, 'Vietnam': 53, 'Myanmar': 67, 'Cambodia': 54,
+            'Laos': 56, 'Japan': 18, 'South Korea': 19, 'North Korea': 19,
+            'Poland': 28, 'Czech Republic': 35, 'Czechia': 35, 'Hungary': 32,
+            'Romania': 41, 'Bulgaria': 43, 'Serbia': 44, 'Croatia': 40,
+            'Greece': 38, 'Portugal': 36, 'Norway': 35, 'Sweden': 42,
+            'Denmark': 37, 'Finland': 39, 'Estonia': 45, 'Latvia': 47,
+            'Lithuania': 44, 'Ukraine': 48, 'Belarus': 45, 'Somalia': 85
+        };
+
+        let currentMapType = 'crime';
+
+        // Major countries to always show labels
+        const majorCountries = [
+            'United States of America', 'Canada', 'Mexico', 'Brazil', 'Argentina',
+            'United Kingdom', 'France', 'Germany', 'Spain', 'Italy', 'Russia',
+            'China', 'Japan', 'India', 'Australia', 'South Africa', 'Egypt',
+            'Saudi Arabia', 'Turkey', 'Indonesia'
+        ];
+
+        // Manual position overrides for specific countries (as [longitude, latitude])
+        const manualPositions = {
+            'United States of America': [-98, 39],  // Center of continental US
+            'Russia': [95, 63],
+            'Canada': [-110, 60],  // Moved further left
+            'China': [105, 35],
+            'Brazil': [-52, -10],
+            'Australia': [135, -25],
+            'France': [2, 47]  // Center of France
+        };
+
+        // Large countries to show with medium labels
+        const largeCountries = [
+            'Chile', 'Peru', 'Colombia', 'Venezuela', 'Bolivia', 'Paraguay', 'Uruguay',
+            'Poland', 'Ukraine', 'Sweden', 'Norway', 'Finland', 'Algeria', 'Libya',
+            'Kazakhstan', 'Mongolia', 'Thailand', 'Myanmar', 'Pakistan', 'Iran',
+            'Afghanistan', 'Iraq', 'Syria', 'Nigeria', 'Ethiopia', 'Kenya', 'Tanzania'
+        ];
+
+        let currentView = 'world';
+        let currentCountry = null;
+        let showingHighest = false;
+
+        function showCountryDetail(countryName) {
+            const modal = document.getElementById('country-modal');
+            const modalTitle = document.getElementById('modal-country-name');
+            const modalPopulation = document.getElementById('modal-population');
+            const chartContainer = document.getElementById('chart-container');
+
+            modalTitle.textContent = countryName;
+
+            // Population
+            const population = populationData[countryName];
+            if (population) {
+                if (population >= 1) {
+                    modalPopulation.innerHTML = `Population: <strong>${population.toFixed(1)} million</strong>`;
+                } else {
+                    modalPopulation.innerHTML = `Population: <strong>${(population * 1000).toFixed(0)}k</strong>`;
+                }
+            } else {
+                modalPopulation.innerHTML = `Population: <strong>No data</strong>`;
+            }
+
+            // Chart data
+            const chartData = [
+                { name: 'Crime Index', value: crimeData[countryName] || 0, max: 100, color: '#e53935', unit: '/100' },
+                { name: 'Average IQ', value: iqData[countryName] || 0, max: 120, color: '#1976d2', unit: '' },
+                { name: 'Ethnic Diversity', value: ethnicityData[countryName] || 0, max: 100, color: '#9c27b0', unit: '/100' },
+                { name: 'Average Income', value: incomeData[countryName] || 0, max: 150, color: '#43a047', unit: 'k$' },
+                { name: 'Birth Rate', value: birthRateData[countryName] || 0, max: 50, color: '#42a5f5', unit: '/1000' }
+            ];
+
+            // Build chart
+            chartContainer.innerHTML = chartData.map(item => {
+                const percentage = (item.value / item.max) * 100;
+                const displayValue = item.value > 0 ? `${item.value}${item.unit}` : 'No data';
+                
+                return `
+                    <div class="chart-item">
+                        <div class="chart-label">
+                            <span class="chart-label-name">${item.name}</span>
+                            <span class="chart-label-value">${displayValue}</span>
+                        </div>
+                        <div class="chart-bar-bg">
+                            <div class="chart-bar-fill" style="width: ${percentage}%; background: ${item.color};"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            modal.classList.add('show');
+        }
+
+        function updateTop10() {
+            const data = getCurrentData();
+            const top10List = document.getElementById('top10-list');
+            const top10Title = document.getElementById('top10-title');
+            const top10Toggle = document.getElementById('top10-toggle');
+            const top10Panel = document.getElementById('top10-panel');
+            
+            // Update panel class based on map type
+            top10Panel.className = 'top10-panel';
+            if (currentMapType === 'crime') {
+                top10Panel.classList.add('crime-mode');
+            } else if (currentMapType === 'iq') {
+                top10Panel.classList.add('iq-mode');
+            } else if (currentMapType === 'ethnicity') {
+                top10Panel.classList.add('ethnicity-mode');
+            } else if (currentMapType === 'income') {
+                top10Panel.classList.add('income-mode');
+            } else if (currentMapType === 'birthrate') {
+                top10Panel.classList.add('birthrate-mode');
+            }
+            
+            // Convert data to array and sort
+            const dataArray = Object.entries(data).map(([country, value]) => ({
+                country,
+                value
+            })).filter(item => item.value > 0); // Filter out countries with no data
+            
+            // Determine if we should show highest based on map type and toggle state
+            let shouldShowHighest;
+            if (currentMapType === 'iq' || currentMapType === 'income' || currentMapType === 'birthrate') {
+                // For IQ, Income, and Birth Rate: default is highest (showingHighest = false means show highest)
+                shouldShowHighest = !showingHighest;
+            } else {
+                // For Crime/Ethnicity: default is lowest (showingHighest = false means show lowest)
+                shouldShowHighest = showingHighest;
+            }
+            
+            // Sort based on current mode
+            if (shouldShowHighest) {
+                dataArray.sort((a, b) => b.value - a.value);
+                top10Title.textContent = currentMapType === 'crime' ? 'Highest Crime' : 
+                                        currentMapType === 'iq' ? 'Highest IQ' : 
+                                        currentMapType === 'income' ? 'Highest Income' : 
+                                        currentMapType === 'birthrate' ? 'Highest Birth Rate' : 'Most Diverse';
+                top10Toggle.textContent = 'Show Lowest';
+            } else {
+                dataArray.sort((a, b) => a.value - b.value);
+                top10Title.textContent = currentMapType === 'crime' ? 'Lowest Crime' : 
+                                        currentMapType === 'iq' ? 'Lowest IQ' : 
+                                        currentMapType === 'income' ? 'Lowest Income' : 
+                                        currentMapType === 'birthrate' ? 'Lowest Birth Rate' : 'Least Diverse';
+                top10Toggle.textContent = 'Show Highest';
+            }
+            
+            // Get top 10
+            const top10 = dataArray.slice(0, 10);
+            
+            // Populate list
+            top10List.innerHTML = top10.map((item, index) => {
+                let valueColor;
+                if (currentMapType === 'iq') {
+                    // Use actual IQ map colors
+                    const iqValue = item.value;
+                    if (iqValue >= 105) valueColor = '#0d47a1';
+                    else if (iqValue >= 100) valueColor = '#1565c0';
+                    else if (iqValue >= 95) valueColor = '#1976d2';
+                    else if (iqValue >= 90) valueColor = '#42a5f5';
+                    else if (iqValue >= 85) valueColor = '#90caf9';
+                    else if (iqValue >= 80) valueColor = '#ff6f00';
+                    else if (iqValue >= 75) valueColor = '#ff5722';
+                    else if (iqValue >= 70) valueColor = '#e53935';
+                    else valueColor = '#c62828';
+                } else if (currentMapType === 'income') {
+                    // Use actual Income map colors
+                    const incValue = item.value;
+                    if (incValue >= 80) valueColor = '#1b5e20';
+                    else if (incValue >= 60) valueColor = '#2e7d32';
+                    else if (incValue >= 40) valueColor = '#43a047';
+                    else if (incValue >= 25) valueColor = '#66bb6a';
+                    else if (incValue >= 15) valueColor = '#ffeb3b';
+                    else if (incValue >= 10) valueColor = '#ffc107';
+                    else if (incValue >= 5) valueColor = '#ff9800';
+                    else if (incValue >= 2) valueColor = '#ff5722';
+                    else valueColor = '#c62828';
+                } else if (currentMapType === 'birthrate') {
+                    // Use actual Birth Rate map colors
+                    const brValue = item.value;
+                    if (brValue >= 40) valueColor = '#0d47a1';
+                    else if (brValue >= 35) valueColor = '#1565c0';
+                    else if (brValue >= 30) valueColor = '#1976d2';
+                    else if (brValue >= 25) valueColor = '#42a5f5';
+                    else if (brValue >= 20) valueColor = '#90caf9';
+                    else if (brValue >= 15) valueColor = '#ff9800';
+                    else if (brValue >= 10) valueColor = '#ff5722';
+                    else if (brValue >= 7) valueColor = '#e53935';
+                    else valueColor = '#c62828';
+                } else {
+                    // Use default low/high colors for crime and ethnicity
+                    valueColor = shouldShowHighest ? '#ff6f00' : '#9c27b0';
+                }
+                
+                return `
+                    <div class="top10-item">
+                        <div class="top10-rank">${index + 1}</div>
+                        <div class="top10-country">${item.country}</div>
+                        <div class="top10-value" style="background: ${valueColor}33; color: ${valueColor}; border: 1px solid ${valueColor}44;">${item.value}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateLegend() {
+            const legendTitle = document.getElementById('legend-title');
+            const legendItems = document.getElementById('legend-items');
+            
+            let title, items;
+            
+            if (currentMapType === 'crime') {
+                title = 'Crime Index Scale';
+                items = [
+                    { color: '#0a0a0a', label: 'No Data', border: '#444' },
+                    { color: '#4a148c', label: 'Very Low (0-25)' },
+                    { color: '#7b1fa2', label: 'Low (25-35)' },
+                    { color: '#9c27b0', label: 'Low-Mid (35-42)' },
+                    { color: '#ba68c8', label: 'Mid (42-50)' },
+                    { color: '#d81b60', label: 'Mid-High (50-58)' },
+                    { color: '#e53935', label: 'High (58-66)' },
+                    { color: '#ff6f00', label: 'Very High (66-74)' },
+                    { color: '#ffd54f', label: 'Extreme (74+)' }
+                ];
+            } else if (currentMapType === 'iq') {
+                title = 'IQ Index Scale';
+                items = [
+                    { color: '#0a0a0a', label: 'No Data', border: '#444' },
+                    { color: '#0d47a1', label: 'Very High (105+)' },
+                    { color: '#1565c0', label: 'High (100-105)' },
+                    { color: '#1976d2', label: 'Above Avg (95-100)' },
+                    { color: '#42a5f5', label: 'Average (90-95)' },
+                    { color: '#90caf9', label: 'Mid (85-90)' },
+                    { color: '#ff6f00', label: 'Below Avg (80-85)' },
+                    { color: '#ff5722', label: 'Low (75-80)' },
+                    { color: '#e53935', label: 'Very Low (70-75)' },
+                    { color: '#c62828', label: 'Extremely Low (<70)' }
+                ];
+            } else if (currentMapType === 'ethnicity') {
+                title = 'Ethnic Diversity Scale';
+                items = [
+                    { color: '#0a0a0a', label: 'No Data', border: '#444' },
+                    { color: '#4a148c', label: 'Homogeneous (0-25)' },
+                    { color: '#7b1fa2', label: 'Low Diversity (25-35)' },
+                    { color: '#9c27b0', label: 'Low-Mod (35-45)' },
+                    { color: '#ba68c8', label: 'Moderate (45-55)' },
+                    { color: '#d81b60', label: 'Diverse (55-65)' },
+                    { color: '#e53935', label: 'Very Diverse (65-75)' },
+                    { color: '#ff6f00', label: 'Highly Diverse (75-85)' },
+                    { color: '#ffd54f', label: 'Extremely Diverse (85+)' }
+                ];
+            } else if (currentMapType === 'income') {
+                title = 'Income Scale';
+                items = [
+                    { color: '#0a0a0a', label: 'No Data', border: '#444' },
+                    { color: '#1b5e20', label: 'Very High (80k$+)' },
+                    { color: '#2e7d32', label: 'High (60-80k$)' },
+                    { color: '#43a047', label: 'Above Avg (40-60k$)' },
+                    { color: '#66bb6a', label: 'Average (25-40k$)' },
+                    { color: '#ffeb3b', label: 'Mid (15-25k$)' },
+                    { color: '#ffc107', label: 'Below Avg (10-15k$)' },
+                    { color: '#ff9800', label: 'Low (5-10k$)' },
+                    { color: '#ff5722', label: 'Very Low (2-5k$)' },
+                    { color: '#c62828', label: 'Extremely Low (<2k$)' }
+                ];
+            } else if (currentMapType === 'birthrate') {
+                title = 'Birth Rate Scale';
+                items = [
+                    { color: '#0a0a0a', label: 'No Data', border: '#444' },
+                    { color: '#0d47a1', label: 'Very High (40+)' },
+                    { color: '#1565c0', label: 'High (35-40)' },
+                    { color: '#1976d2', label: 'Above Avg (30-35)' },
+                    { color: '#42a5f5', label: 'Average (25-30)' },
+                    { color: '#90caf9', label: 'Mid (20-25)' },
+                    { color: '#ff9800', label: 'Below Avg (15-20)' },
+                    { color: '#ff5722', label: 'Low (10-15)' },
+                    { color: '#e53935', label: 'Very Low (7-10)' },
+                    { color: '#c62828', label: 'Extremely Low (<7)' }
+                ];
+            }
+            
+            legendTitle.textContent = title;
+            legendItems.innerHTML = items.map(item => `
+                <div class="legend-item">
+                    <div class="legend-color" style="background: ${item.color}; border-color: ${item.border || 'rgba(255, 255, 255, 0.2)'};"></div>
+                    <div class="legend-label">${item.label}</div>
+                </div>
+            `).join('');
+        }
+
+        function getCurrentData() {
+            if (currentMapType === 'crime') return crimeData;
+            if (currentMapType === 'iq') return iqData;
+            if (currentMapType === 'ethnicity') return ethnicityData;
+            if (currentMapType === 'income') return incomeData;
+            if (currentMapType === 'birthrate') return birthRateData;
+            return crimeData;
+        }
+
+        function getDataColor(value, type) {
+            if (!value || value === 0) return '#0a0a0a';
+            
+            if (type === 'crime') {
+                if (value < 25) return '#4a148c';
+                if (value < 35) return '#7b1fa2';
+                if (value < 42) return '#9c27b0';
+                if (value < 50) return '#ba68c8';
+                if (value < 58) return '#d81b60';
+                if (value < 66) return '#e53935';
+                if (value < 74) return '#ff6f00';
+                return '#ffd54f';
+            } else if (type === 'iq') {
+                // Low IQ = Red, High IQ = Blue - with increased contrast
+                if (value >= 105) return '#0d47a1';  // Very deep blue - Very high IQ
+                if (value >= 100) return '#1565c0';  // Deep blue - High IQ
+                if (value >= 95) return '#1976d2';   // Medium blue - Above average
+                if (value >= 90) return '#42a5f5';   // Light blue - Average
+                if (value >= 85) return '#90caf9';   // Very light blue - Mid
+                if (value >= 80) return '#ff6f00';   // Dark orange - Below average
+                if (value >= 75) return '#ff5722';   // Orange-red - Low
+                if (value >= 70) return '#e53935';   // Bright red - Very low
+                return '#c62828';                     // Dark red - Extremely low
+            } else if (type === 'ethnicity') {
+                if (value < 25) return '#4a148c';    // Very homogeneous
+                if (value < 35) return '#7b1fa2';    // Homogeneous
+                if (value < 45) return '#9c27b0';    // Low diversity
+                if (value < 55) return '#ba68c8';    // Moderate
+                if (value < 65) return '#d81b60';    // Diverse
+                if (value < 75) return '#e53935';    // Very diverse
+                if (value < 85) return '#ff6f00';    // Highly diverse
+                return '#ffd54f';                     // Extremely diverse
+            } else if (type === 'income') {
+                // Low Income = Red, Mid Income = Yellow, High Income = Green
+                if (value >= 80) return '#1b5e20';    // Dark green - Very high income
+                if (value >= 60) return '#2e7d32';    // Green - High income
+                if (value >= 40) return '#43a047';    // Medium green - Above average
+                if (value >= 25) return '#66bb6a';    // Light green - Average
+                if (value >= 15) return '#ffeb3b';    // Yellow - Mid income
+                if (value >= 10) return '#ffc107';    // Orange-yellow - Below average
+                if (value >= 5) return '#ff9800';     // Orange - Low
+                if (value >= 2) return '#ff5722';     // Red-orange - Very low
+                return '#c62828';                     // Dark red - Extremely low
+            } else if (type === 'birthrate') {
+                // Low Birth Rate = Red, High Birth Rate = Blue
+                if (value >= 40) return '#0d47a1';    // Very deep blue - Very high birth rate
+                if (value >= 35) return '#1565c0';    // Deep blue - High birth rate
+                if (value >= 30) return '#1976d2';    // Medium blue - Above average
+                if (value >= 25) return '#42a5f5';    // Light blue - Average
+                if (value >= 20) return '#90caf9';    // Very light blue - Mid
+                if (value >= 15) return '#ff9800';    // Orange - Below average
+                if (value >= 10) return '#ff5722';    // Orange-red - Low
+                if (value >= 7) return '#e53935';     // Bright red - Very low
+                return '#c62828';                     // Dark red - Extremely low
+            }
+            return '#000000';
+        }
+
+        function getCrimeColor(crimeIndex) {
+            return getDataColor(crimeIndex, 'crime');
+        }
+
+        function getCrimeLevel(crimeIndex) {
+            if (!crimeIndex || crimeIndex === 0) return 'No Data';
+            if (crimeIndex < 25) return 'Very Low';
+            if (crimeIndex < 35) return 'Low';
+            if (crimeIndex < 42) return 'Low-Mid';
+            if (crimeIndex < 50) return 'Mid';
+            if (crimeIndex < 58) return 'Mid-High';
+            if (crimeIndex < 66) return 'High';
+            if (crimeIndex < 74) return 'Very High';
+            return 'Extreme';
+        }
+
+        const width = window.innerWidth;
+        const height = window.innerHeight - 70;
+
+        const svg = d3.select('#map');
+        const g = svg.append('g');
+        const tooltip = d3.select('#tooltip');
+        const backBtn = d3.select('#back-btn');
+        const loading = d3.select('#loading');
+
+        // Larger initial scale for better detail
+        let projection = d3.geoMercator()
+            .scale(200)
+            .translate([width / 2, height / 1.5]);
+
+        let path = d3.geoPath().projection(projection);
+
+        let zoom = d3.zoom()
+            .scaleExtent([1, 12])
+            .on('zoom', (event) => {
+                g.attr('transform', event.transform);
+            });
+
+        svg.call(zoom);
+
+        function loadWorldMap() {
+            currentView = 'world';
+            currentCountry = null;
+            g.selectAll('*').remove();
+            
+            d3.select('#title-main').text('Reality Check');
+            d3.select('#title-sub').text('Interactive visualization of crime rates worldwide');
+            backBtn.style('display', 'none');
+
+            projection = d3.geoMercator()
+                .scale(200)
+                .translate([width / 2, height / 1.5]);
+            path = d3.geoPath().projection(projection);
+
+            svg.transition().call(zoom.transform, d3.zoomIdentity);
+
+            d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(geoData => {
+                loading.style('display', 'none');
+                const countries = topojson.feature(geoData, geoData.objects.countries);
+                const mapData = getCurrentData();
+                
+                // Draw countries
+                g.selectAll('path')
+                    .data(countries.features)
+                    .enter()
+                    .append('path')
+                    .attr('class', 'country')
+                    .attr('d', path)
+                    .attr('fill', d => {
+                        const countryName = d.properties.name;
+                        const value = mapData[countryName] || 0;
+                        return getDataColor(value, currentMapType);
+                    })
+                    .on('mouseover', function(event, d) {
+                        const countryName = d.properties.name;
+                        const value = mapData[countryName] || 0;
+                        const level = getCrimeLevel(value);
+                        
+                        tooltip.select('.tooltip-country').text(countryName);
+                        
+                        if (currentMapType === 'crime') {
+                            tooltip.select('.tooltip-crime').text(
+                                value > 0 ? `Crime Index: ${value}/100 (${level})` : 'Crime Index: No Data'
+                            );
+                        } else if (currentMapType === 'iq') {
+                            tooltip.select('.tooltip-crime').text(
+                                value > 0 ? `Average IQ: ${value}` : 'IQ: No Data'
+                            );
+                        } else if (currentMapType === 'ethnicity') {
+                            tooltip.select('.tooltip-crime').text(
+                                value > 0 ? `Ethnic Diversity: ${value}/100` : 'Ethnic Diversity: No Data'
+                            );
+                        } else if (currentMapType === 'income') {
+                            tooltip.select('.tooltip-crime').text(
+                                value > 0 ? `Avg Income: $${value}k/year` : 'Income: No Data'
+                            );
+                        } else if (currentMapType === 'birthrate') {
+                            tooltip.select('.tooltip-crime').text(
+                                value > 0 ? `Birth Rate: ${value}/1000` : 'Birth Rate: No Data'
+                            );
+                        }
+                        
+                        const hasRegionalData = false; // Removed regional breakdown feature
+                        tooltip.select('.tooltip-hint').text('');
+                        
+                        tooltip.classed('show', true);
+                    })
+                    .on('mousemove', function(event) {
+                        tooltip
+                            .style('left', (event.pageX + 15) + 'px')
+                            .style('top', (event.pageY + 15) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        tooltip.classed('show', false);
+                    })
+                    .on('click', function(event, d) {
+                        const countryName = d.properties.name;
+                        showCountryDetail(countryName);
+                    });
+
+                // Add country labels with better positioning
+                g.selectAll('text.place-label')
+                    .data(countries.features)
+                    .enter()
+                    .append('text')
+                    .attr('class', d => {
+                        const name = d.properties.name;
+                        if (majorCountries.includes(name)) return 'place-label major';
+                        if (largeCountries.includes(name)) return 'place-label large';
+                        return 'place-label';
+                    })
+                    .attr('transform', d => {
+                        const name = d.properties.name;
+                        let centroid;
+                        
+                        // Use manual position if available
+                        if (manualPositions[name]) {
+                            centroid = projection(manualPositions[name]);
+                        } else {
+                            centroid = path.centroid(d);
+                        }
+                        
+                        // Check if centroid is valid (not NaN and within bounds)
+                        if (isNaN(centroid[0]) || isNaN(centroid[1])) {
+                            return `translate(-9999, -9999)`; // Hide invalid labels
+                        }
+                        return `translate(${centroid[0]}, ${centroid[1]})`;
+                    })
+                    .text(d => d.properties.name)
+                    .style('display', d => {
+                        // Only show labels for larger/major countries
+                        const name = d.properties.name;
+                        const centroid = manualPositions[name] ? projection(manualPositions[name]) : path.centroid(d);
+                        
+                        // Hide if centroid is invalid
+                        if (isNaN(centroid[0]) || isNaN(centroid[1])) {
+                            return 'none';
+                        }
+                        
+                        if (majorCountries.includes(name) || largeCountries.includes(name)) {
+                            return 'block';
+                        }
+                        return 'none';
+                    });
+            });
+        }
+
+        function loadUSMap() {
+            currentView = 'us';
+            currentCountry = 'United States of America';
+            g.selectAll('*').remove();
+            
+            d3.select('#title-main').text('United States');
+            d3.select('#title-sub').text('Crime index by state');
+            backBtn.style('display', 'block');
+
+            projection = d3.geoAlbersUsa()
+                .scale(1300)
+                .translate([width / 2, height / 2]);
+            path = d3.geoPath().projection(projection);
+
+            svg.transition().call(zoom.transform, d3.zoomIdentity);
+
+            d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(data => {
+                const states = topojson.feature(data, data.objects.states);
+                
+                // Exclude US territories, only show the 50 states
+                const excludeTerritories = ['Commonwealth of the Northern Mariana Islands', 'Northern Mariana Islands', 'Puerto Rico', 'Guam', 'United States Virgin Islands', 'Virgin Islands', 'American Samoa'];
+                const statesOnly = states.features.filter(d => !excludeTerritories.includes(d.properties.name));
+                
+                // Draw states
+                g.selectAll('path')
+                    .data(statesOnly)
+                    .enter()
+                    .append('path')
+                    .attr('class', 'state')
+                    .attr('d', path)
+                    .attr('fill', d => {
+                        const stateName = d.properties.name;
+                        const crimeIndex = usStatesData[stateName] || 0;
+                        return getCrimeColor(crimeIndex);
+                    })
+                    .on('mouseover', function(event, d) {
+                        const stateName = d.properties.name;
+                        const crimeIndex = usStatesData[stateName] || 0;
+                        const crimeLevel = getCrimeLevel(crimeIndex);
+                        
+                        tooltip.select('.tooltip-country').text(stateName);
+                        tooltip.select('.tooltip-crime').text(
+                            crimeIndex > 0 
+                                ? `Crime Index: ${crimeIndex}/100 (${crimeLevel})` 
+                                : 'Crime Index: No Data'
+                        );
+                        tooltip.select('.tooltip-hint').text('');
+                        tooltip.classed('show', true);
+                    })
+                    .on('mousemove', function(event) {
+                        tooltip
+                            .style('left', (event.pageX + 15) + 'px')
+                            .style('top', (event.pageY + 15) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        tooltip.classed('show', false);
+                    })
+                    .on('click', function(event, d) {
+                        const countryName = d.properties.name;
+                        showCountryPopup(countryName);
+                    });
+
+                // Add state labels (excluding territories and non-state regions)
+                const excludeLabels = ['Commonwealth', 'Northern Mariana Islands', 'Puerto Rico', 'Guam', 'Virgin Islands', 'American Samoa', 'Commonwealth of the Northern Mariana Islands', 'United States Virgin Islands'];
+                
+                g.selectAll('text.place-label')
+                    .data(statesOnly.filter(d => !excludeLabels.includes(d.properties.name)))
+                    .enter()
+                    .append('text')
+                    .attr('class', 'place-label large')
+                    .attr('transform', d => {
+                        const centroid = path.centroid(d);
+                        return `translate(${centroid[0]}, ${centroid[1]})`;
+                    })
+                    .text(d => d.properties.name);
+            });
+        }
+
+        // Initial load
+        updateLegend();
+        updateTop10();
+        loadWorldMap();
+
+        // Back button
+        backBtn.on('click', loadWorldMap);
+
+        document.getElementById('zoom-in').addEventListener('click', () => {
+            svg.transition().call(zoom.scaleBy, 1.5);
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', () => {
+            svg.transition().call(zoom.scaleBy, 0.67);
+        });
+
+        document.getElementById('zoom-reset').addEventListener('click', () => {
+            svg.transition().call(zoom.transform, d3.zoomIdentity);
+        });
+
+        // Map type dropdown handler
+        document.getElementById('map-type').addEventListener('change', (event) => {
+            currentMapType = event.target.value;
+            showingHighest = false; // Reset toggle state when changing map type
+            updateLegend();
+            updateTop10();
+            if (currentView === 'world') {
+                loadWorldMap();
+            }
+        });
+
+        // Top 10 toggle handler
+        document.getElementById('top10-toggle').addEventListener('click', () => {
+            showingHighest = !showingHighest;
+            updateTop10();
+        });
+
+        // Donation modal handlers
+        const donationModal = document.getElementById('donation-modal');
+        const donateBtn = document.getElementById('donate-btn');
+        const closeModal = document.getElementById('close-modal');
+        const copiedNotification = document.getElementById('copied-notification');
+
+        donateBtn.addEventListener('click', () => {
+            donationModal.classList.add('show');
+        });
+
+        closeModal.addEventListener('click', () => {
+            donationModal.classList.remove('show');
+        });
+
+        // Close modal when clicking outside
+        donationModal.addEventListener('click', (e) => {
+            if (e.target === donationModal) {
+                donationModal.classList.remove('show');
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && donationModal.classList.contains('show')) {
+                donationModal.classList.remove('show');
+            }
+        });
+
+        // Copy crypto addresses to clipboard
+        document.querySelectorAll('.crypto-address').forEach(element => {
+            element.addEventListener('click', async () => {
+                const address = element.getAttribute('data-address');
+                try {
+                    await navigator.clipboard.writeText(address);
+                    
+                    // Show notification
+                    copiedNotification.classList.add('show');
+                    setTimeout(() => {
+                        copiedNotification.classList.remove('show');
+                    }, 2500);
+                } catch (err) {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = address;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    copiedNotification.classList.add('show');
+                    setTimeout(() => {
+                        copiedNotification.classList.remove('show');
+                    }, 2500);
+                }
+            });
+        });
+
+        // Modal close handlers
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('country-modal').classList.remove('show');
+        });
+
+        document.getElementById('country-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'country-modal') {
+                document.getElementById('country-modal').classList.remove('show');
+            }
+        });
+
+        // Mobile info sheet handlers
+        const mobileToggle = document.getElementById('mobile-info-toggle');
+        const mobileSheet = document.getElementById('mobile-info-sheet');
+        const mobileTabs = document.querySelectorAll('.mobile-sheet-tab');
+        const mobileSections = document.querySelectorAll('.mobile-sheet-section');
+
+        if (mobileToggle && mobileSheet) {
+            mobileToggle.addEventListener('click', () => {
+                mobileSheet.classList.toggle('open');
+                // Sync mobile data with desktop when opening
+                if (mobileSheet.classList.contains('open')) {
+                    syncMobileData();
+                }
+            });
+
+            // Close on handle click
+            const handle = document.querySelector('.mobile-sheet-handle');
+            if (handle) {
+                handle.addEventListener('click', () => {
+                    mobileSheet.classList.remove('open');
+                });
+            }
+
+            // Tab switching
+            mobileTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTab = tab.dataset.tab;
+                    
+                    // Update active tab
+                    mobileTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Update active section
+                    mobileSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(`mobile-${targetTab}-section`).classList.add('active');
+                });
+            });
+
+            // Mobile top10 toggle
+            const mobileTop10Toggle = document.getElementById('mobile-top10-toggle');
+            if (mobileTop10Toggle) {
+                mobileTop10Toggle.addEventListener('click', () => {
+                    showingHighest = !showingHighest;
+                    updateTop10();
+                    syncMobileData();
+                });
+            }
+        }
+
+        // Function to sync mobile data with desktop
+        function syncMobileData() {
+            // Sync legend
+            const desktopLegendTitle = document.getElementById('legend-title');
+            const desktopLegendItems = document.getElementById('legend-items');
+            const mobileLegendTitle = document.getElementById('mobile-legend-title');
+            const mobileLegendItems = document.getElementById('mobile-legend-items');
+            
+            if (desktopLegendTitle && mobileLegendTitle) {
+                mobileLegendTitle.textContent = desktopLegendTitle.textContent;
+            }
+            if (desktopLegendItems && mobileLegendItems) {
+                mobileLegendItems.innerHTML = desktopLegendItems.innerHTML;
+            }
+
+            // Sync top10
+            const desktopTop10Title = document.getElementById('top10-title');
+            const desktopTop10List = document.getElementById('top10-list');
+            const desktopTop10Toggle = document.getElementById('top10-toggle');
+            const mobileTop10Title = document.getElementById('mobile-top10-title');
+            const mobileTop10List = document.getElementById('mobile-top10-list');
+            const mobileTop10Toggle = document.getElementById('mobile-top10-toggle');
+            
+            if (desktopTop10Title && mobileTop10Title) {
+                mobileTop10Title.textContent = desktopTop10Title.textContent;
+            }
+            if (desktopTop10List && mobileTop10List) {
+                mobileTop10List.innerHTML = desktopTop10List.innerHTML;
+            }
+            if (desktopTop10Toggle && mobileTop10Toggle) {
+                mobileTop10Toggle.textContent = desktopTop10Toggle.textContent;
+            }
+        }
+
+        }); // End of window load event
+    </script>
+</body>
+</html>
